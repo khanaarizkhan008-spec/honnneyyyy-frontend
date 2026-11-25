@@ -1,0 +1,155 @@
+@import "tailwindcss";
+
+@theme {
+  --font-editorial: "Playfair Display", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-espresso: #120B0A;
+  --color-espresso-ink: #1A1110;
+  --color-cream: #FAF3E8;
+  --color-cherry: #D91E36;
+  --color-blush: #F7C5CC;
+  --color-honey: #E89B25;
+  --color-sage: #10B981;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    background-color: #120B0A;
+    color: #FAF3E8;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: #120B0A;
+  }
+}
+
+/* Tactile paper grain overlay */
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+}
+
+/* Perforated cocktail-napkin / receipt edges */
+.receipt-serrated-top {
+  background-image: radial-gradient(circle at 8px 0px, #120B0A 6px, transparent 6.5px);
+  background-size: 16px 10px;
+  background-repeat: repeat-x;
+}
+
+.receipt-serrated-bottom {
+  background-image: radial-gradient(circle at 8px 10px, #120B0A 6px, transparent 6.5px);
+  background-size: 16px 10px;
+  background-repeat: repeat-x;
+}
+
+/* Kinetic background marquee */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 34s linear infinite;
+}
+
+/* Intro sequence animations */
+@keyframes kissStampDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-90px) scale(1.65) rotate(-14deg);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(4px) scale(0.95) rotate(-7deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(-8deg);
+  }
+}
+
+@keyframes blushRipple {
+  0% {
+    opacity: 0.75;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@keyframes honeyStretchIn {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.35em;
+    transform: translateY(14px);
+  }
+  70% {
+    opacity: 1;
+    letter-spacing: -0.04em;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    letter-spacing: -0.02em;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stickerSnapIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-8deg) translateY(10px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.04) rotate(-2deg) translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-2.5deg) translateY(0);
+  }
+}
+
+.animate-kiss-stamp {
+  animation: kissStampDrop 0.6s cubic-bezier(0.22, 1.25, 0.36, 1) forwards;
+}
+
+.animate-blush-ripple {
+  animation: blushRipple 0.75s ease-out 0.28s forwards;
+}
+
+.animate-honey-stretch {
+  opacity: 0;
+  animation: honeyStretchIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.58s forwards;
+}
+
+.animate-sticker-snap {
+  opacity: 0;
+  animation: stickerSnapIn 0.5s cubic-bezier(0.22, 1.25, 0.36, 1) 1.25s forwards;
+}
+
+/* Hard offset pin-up shadow */
+.hard-shadow-cherry {
+  box-shadow: 4px 4px 0px #1A1110;
+}
+
+.hard-shadow-cream {
+  box-shadow: 4px 4px 0px #D91E36;
+}
+
+.hard-shadow-blush {
+  box-shadow: 3px 3px 0px #1A1110;
+}

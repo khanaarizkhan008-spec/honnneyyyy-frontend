@@ -1,0 +1,20 @@
+<svg viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="120" rx="28" fill="#120B0A" />
+  <g transform="rotate(-8 90 60)">
+    <path
+      d="M22 57C33 34 57 22 77 30C84 33 87 37 90 37C93 37 96 33 103 30C123 22 147 34 158 57C138 62 114 57 90 53C66 57 42 62 22 57Z"
+      fill="#D91E36"
+    />
+    <path
+      d="M29 66C55 62 125 62 151 66C141 92 116 103 90 102C64 103 39 92 29 66Z"
+      fill="#D91E36"
+    />
+    <path
+      d="M48 43C57 37 67 36 74 38M104 84C115 82 125 78 132 72"
+      stroke="#FAF3E8"
+      strokeWidth="3"
+      strokeLinecap="round"
+      strokeOpacity="0.45"
+    />
+  </g>
+</svg>
