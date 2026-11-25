@@ -14,7 +14,7 @@ const MANIFEST_JSON = {
   ],
   web_accessible_resources: [
     {
-      resources: ['honnnneyyyy-alert.mpeg'],
+      resources: ['honnnneyyyy-alert.mp3'],
       matches: [
         'https://web.whatsapp.com/*',
         'https://www.instagram.com/*',
@@ -56,7 +56,7 @@ const CONTENT_JS = `(() => {
   function playAlertAudio() {
     if (soundMuted) return;
     try {
-      const audio = new Audio(chrome.runtime.getURL('honnnneyyyy-alert.mpeg'));
+      const audio = new Audio(chrome.runtime.getURL('honnnneyyyy-alert.mp3'));
       audio.volume = 0.85;
       audio.play().catch(() => {});
     } catch {}
@@ -203,10 +203,10 @@ export async function downloadChromeExtensionZip(): Promise<void> {
   zip.file('popup.html', POPUP_HTML);
 
   try {
-    const audioRes = await fetch('/honnnneyyyy-alert.mpeg');
+    const audioRes = await fetch('/honnnneyyyy-alert.mp3');
     if (audioRes.ok) {
       const audioBlob = await audioRes.blob();
-      zip.file('honnnneyyyy-alert.mpeg', audioBlob);
+      zip.file('honnnneyyyy-alert.mp3', audioBlob);
     }
   } catch {
     // Continue even if audio fetch fails
