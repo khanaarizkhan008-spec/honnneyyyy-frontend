@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Volume2 } from 'lucide-react';
 import { LipstickKissMark } from './LipstickKissMark';
 import { playBestieAlert } from '../utils/soundAlert';
 
@@ -7,29 +8,40 @@ interface IntroSequenceProps {
 }
 
 export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
+  const [needsTapForSound, setNeedsTapForSound] = useState(false);
+
   useEffect(() => {
+    let cancelled = false;
+
     const soundTimer = setTimeout(() => {
-      void playBestieAlert();
-    }, 260);
+      void playBestieAlert().then((started) => {
+        if (!cancelled && !started) {
+          setNeedsTapForSound(true);
+        }
+      });
+    }, 220);
 
     const timer = setTimeout(() => {
       onComplete();
-    }, 2050);
+    }, 2400);
 
     return () => {
+      cancelled = true;
       clearTimeout(soundTimer);
       clearTimeout(timer);
     };
   }, [onComplete]);
 
-  const handleDismiss = () => {
-    void playBestieAlert();
-    onComplete();
+  const handleTap = () => {
+    void playBestieAlert(true);
+    setTimeout(() => {
+      onComplete();
+    }, 350);
   };
 
   return (
     <div
-      onClick={handleDismiss}
+      onClick={handleTap}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#120B0A] paper-grain px-6 cursor-pointer select-none"
       role="status"
       aria-label="Honnnneyyyy intro"
@@ -54,6 +66,13 @@ export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
             Short, sweet, and totally fake? Let&apos;s check the receipts together.
           </p>
         </div>
+
+        {needsTapForSound && (
+          <div className="mt-5 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FAF3E8]/10 border border-[#FAF3E8]/25 text-[#FAF3E8] font-mono text-xs animate-pulse">
+            <Volume2 className="w-3.5 h-3.5 text-[#F7C5CC]" />
+            <span>Tap anywhere for sound</span>
+          </div>
+        )}
       </div>
 
       <span className="absolute bottom-8 font-mono text-[11px] uppercase tracking-widest text-[#FAF3E8]/40">
