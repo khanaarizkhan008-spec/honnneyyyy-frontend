@@ -1,42 +1,85 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LipstickKissMark } from './LipstickKissMark';
-import {
-  playBestieAlert,
-  playOnFirstInteractionIfBlocked,
-} from '../utils/soundAlert';
+import { playBestieAlert } from '../utils/soundAlert';
 
 interface IntroSequenceProps {
   onComplete: () => void;
 }
 
 export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
-  useEffect(() => {
-    const soundTimer = setTimeout(() => {
-      void playBestieAlert(true).then((started) => {
-        if (!started) {
-          playOnFirstInteractionIfBlocked();
-        }
-      });
-    }, 220);
+  const [phase, setPhase] = useState<'checking' | 'gate' | 'playing'>('checking');
 
-    const timer = setTimeout(() => {
-      onComplete();
-    }, 2200);
+  useEffect(() => {
+    let cancelled = false;
+    let finishTimer: ReturnType<typeof setTimeout> | undefined;
+
+    void playBestieAlert(true).then((started) => {
+      if (cancelled) return;
+      if (started) {
+        setPhase('playing');
+        finishTimer = setTimeout(() => {
+          onComplete();
+        }, 2200);
+      } else {
+        setPhase('gate');
+      }
+    });
 
     return () => {
-      clearTimeout(soundTimer);
-      clearTimeout(timer);
+      cancelled = true;
+      if (finishTimer) clearTimeout(finishTimer);
     };
   }, [onComplete]);
 
-  const handleTap = () => {
-    void playBestieAlert(true);
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    const timer = setTimeout(() => {
+      onComplete();
+    }, 2200);
+    return () => clearTimeout(timer);
+  }, [phase, onComplete]);
+
+  const handleStartWithSound = () => {
+    if (phase === 'gate') {
+      void playBestieAlert(true);
+      setPhase('playing');
+      return;
+    }
     onComplete();
   };
 
+  if (phase === 'checking') {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#120B0A] paper-grain" />
+    );
+  }
+
+  if (phase === 'gate') {
+    return (
+      <button
+        type="button"
+        onClick={handleStartWithSound}
+        className="fixed inset-0 z-50 w-full h-full flex flex-col items-center justify-center bg-[#120B0A] paper-grain px-6 cursor-pointer select-none focus:outline-none"
+        aria-label="Tap to open Honnnneyyyy with sound"
+      >
+        <div className="relative flex flex-col items-center text-center group">
+          <div className="transition-transform duration-300 group-hover:scale-110 group-active:scale-95 drop-shadow-[0_12px_28px_rgba(217,30,54,0.5)] mb-4">
+            <LipstickKissMark className="w-28 h-20" />
+          </div>
+          <span className="font-editorial italic font-bold text-2xl sm:text-3xl text-[#FAF3E8]">
+            Hon<span className="text-[#E89B25]">nn</span>neyyyy
+          </span>
+          <span className="mt-4 inline-flex items-center px-4 py-2 rounded-full bg-[#F7C5CC] text-[#1A1110] border-2 border-[#1A1110] hard-shadow-blush font-mono font-bold text-xs uppercase tracking-wider">
+            Tap to open
+          </span>
+        </div>
+      </button>
+    );
+  }
+
   return (
     <div
-      onClick={handleTap}
+      onClick={handleStartWithSound}
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#120B0A] paper-grain px-6 cursor-pointer select-none"
       role="status"
       aria-label="Honnnneyyyy intro"
