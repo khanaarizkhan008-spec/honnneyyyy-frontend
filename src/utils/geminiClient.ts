@@ -1,6 +1,9 @@
 import type { CheckResult, InputMode, RescueSituation } from '../types';
 
-const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const API_BASE = (
+  import.meta.env.VITE_API_URL ||
+  'https://honnnneyyyy-backend.khanaarizkhan008.workers.dev'
+).replace(/\/$/, '');
 
 export function clearAllStoredData(): void {
   try {

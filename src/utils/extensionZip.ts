@@ -39,7 +39,14 @@ const MANIFEST_JSON = {
   ],
 };
 
-const CONTENT_JS = `(() => {
+function getLiveCheckUrl(): string {
+  if (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')) {
+    return `${window.location.origin}/check`;
+  }
+  return 'https://honnneyyyy.embarko.app/check';
+}
+
+const buildContentJs = (checkUrl: string) => `(() => {
   const SUGAR_TRIGGERS = [
     { rx: /telegram|move off|off this app/i, label: 'Off-app pivot' },
     { rx: /keep us secret|don'?t tell/i, label: 'Secrecy request' },
@@ -111,7 +118,7 @@ const CONTENT_JS = `(() => {
     const openBtn = badgeEl.querySelector('#hny-open-btn');
     if (openBtn) {
       openBtn.onclick = () => {
-        window.open('http://localhost:5173/check', '_blank');
+        window.open('${checkUrl}', '_blank');
       };
     }
 
@@ -136,7 +143,7 @@ const CONTENT_JS = `(() => {
 })();
 `;
 
-const POPUP_HTML = `<!doctype html>
+const buildPopupHtml = (checkUrl: string) => `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -190,17 +197,18 @@ const POPUP_HTML = `<!doctype html>
       <h1>Honnnneyyyy</h1>
       <p>Watching your back quietly on WhatsApp Web, Instagram DMs, and Telegram Web with instant audio + shoulder-tap alerts.</p>
       <p class="note">v1.0: Live pattern &amp; audio alerts. Upcoming v1.1: Full on-page Gemini AI rewriting.</p>
-      <a href="http://localhost:5173/check" target="_blank">Open Full Receipt Checker</a>
+      <a href="${checkUrl}" target="_blank">Open Full Receipt Checker</a>
     </div>
   </body>
 </html>
 `;
 
 export async function downloadChromeExtensionZip(): Promise<void> {
+  const checkUrl = getLiveCheckUrl();
   const zip = new JSZip();
   zip.file('manifest.json', JSON.stringify(MANIFEST_JSON, null, 2));
-  zip.file('content.js', CONTENT_JS);
-  zip.file('popup.html', POPUP_HTML);
+  zip.file('content.js', buildContentJs(checkUrl));
+  zip.file('popup.html', buildPopupHtml(checkUrl));
 
   try {
     const audioRes = await fetch('/honnnneyyyy-alert.mp3');
