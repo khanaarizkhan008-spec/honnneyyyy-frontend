@@ -63,9 +63,6 @@ export const CoViewingChecker: React.FC<CoViewingCheckerProps> = ({
       minDelay,
     ]);
 
-    setLoadingStage('Wait a second... swipe across this.');
-    await new Promise((r) => setTimeout(r, 550));
-
     setLoadingStage(null);
     onResultReady(checked);
   };
