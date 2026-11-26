@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { LipstickKissMark } from './LipstickKissMark';
-import { playBestieAlert } from '../utils/soundAlert';
+import {
+  playBestieAlert,
+  playOnFirstInteractionIfBlocked,
+} from '../utils/soundAlert';
 
 interface IntroSequenceProps {
   onComplete: () => void;
@@ -8,11 +11,13 @@ interface IntroSequenceProps {
 
 export const IntroSequence: React.FC<IntroSequenceProps> = ({ onComplete }) => {
   useEffect(() => {
-    void playBestieAlert(true);
-
     const soundTimer = setTimeout(() => {
-      void playBestieAlert(true);
-    }, 240);
+      void playBestieAlert(true).then((started) => {
+        if (!started) {
+          playOnFirstInteractionIfBlocked();
+        }
+      });
+    }, 220);
 
     const timer = setTimeout(() => {
       onComplete();
